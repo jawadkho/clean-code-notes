@@ -29,3 +29,85 @@
 * **Demeter's Law**: Don't let a line become a focus.
   * That is, it should have too much knowledge of many classes.
   * rental.getMovie().getTitle() -> rental.getMovieTitle()
+  * Strings in tests sholuld use an appropriate name:
+    * `new Customer("Customer Name")` as opposed to `new Customer("Fred")`
+* You *should* refector unit tests.
+  * Or else one by one you will lose tests (because, for example, they may get complicated and abandoned).
+  * Without unit tests you will have less of an ability to refactor your code.
+* **Step Down Rule**: Every function should exit at a level of abstraction below the current function.
+* Switch statements are fundamentally dangerous, espcially as they scale.
+* You don't need to do one to one coupling of test classes to regular classes.
+  * The objectives should be to check behaviour and to cover all lines of code (however, 100% coverage isn't realistic and totally meaningful).
+* Use R-G-Refactor - TDD
+* The test (in the diagram below) should check all behaviours and lines.
+```
+                                   +--+
+                                +->|c1|
+          +                     |  +--+
++------+  |   +-------+   +-----+
+|      |  |   | class |   |     |  +--+
+| test +----->+ cA    +-->+ cB  +->|c2|
+|      |  |   |       |   |     |  +--+
++------+  |   +-------+   +-----+
+          +                     |  +--+
+                                +->|c3|
+                                   +--+
+```
+* Mocking should be done at architectural boundaries (of-the-hand est. ~1/10)
+* See Mutation Testing (e.g. ++ -> --).
+* Change dependencies. See below: Have A depend upon the Interface B (InB) rather than directly on B, the agreement.
+```
++---+   +---+      +---+    +---+    +---+
+| A +-->+ B | ===> | A +--->+InB+<---+ B |
++---+   +---+      +---+    +---+    +---+
+```
+
+# Day 3
+
+* Robert's Rule: 3 arguments max
+  * Same for constructor.
+  * Anything more could (or rather should) be a datastructue.
+  * Could use a setter (for anything more than 3).
+  * He doesn't like the idea of an *output* arguments.
+  * Usually (but not always) booleans are disliked. It's not always clear what the boolean means.
+    * 2 is a no-no.
+* Side-Effect functions are things that change state e.g. open() & close(). Functions that come in pairs.
+  * Garbage collection is a result of inability to work well with pair functions (i.e. new ... & delete ...)
+* Try/Catch
+  * Should be that main focus in a function.
+  * Should be the first line of function.
+  * Should be a single line:
+    ```
+    try {
+      doSomething();
+    } catch (Exception e) {
+      log(e);
+    }
+    ```
+  * Don't throw errors far up the stack.
+  * Translate an exception as it goes up. Hide it behind abstractions.
+    * IndexOutOfBoundsException -> SomeMoreInformativeException
+* TDD Rules
+  * 1) You are not allowed to write production code without a failing unit test.
+    * Failing includes no compiling.
+  * 2) You are not allowed to (continue to) write a unit test if it is failling.
+  * 3) You are not alloed to write production code if the unit tests are passing.
+* TDD (is basically) Double Entry Book Keeping.
+  * In Double Entry Book keeping it would be a laughable statement to say to do credits now and debits later.
+  * However, in software engineering it would be to say a similar statement: production now and tests later.
+
+## Comments
+* A comment is not a reason to not fix something. For example: 'This will never equal to 3'.
+  * Rule: See every comment as a failure.
+* Comment Lie:
+  * The rot silently.
+  * They can get migrated without though and no longer fit or make sense.
+* Good (or okay) comments:
+  * Copyrights.
+  * When fighting a design pattern naming scheme, for example, if you can't use `productInstance()` because the word Instance is being used as part of another pattern.
+
+## Sizes
+* File Sizes should typically be between 40 and 100 and all should be less than 500. JUnit was used as an example for this.
+* Line lenght shoudl typically be between 80 and 120.
+* "Architecture is about intent" - the architecture should should the intention rather than forcefully fitting in the code or project.
+  * It shouldn't dictate the application.
